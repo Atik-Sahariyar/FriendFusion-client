@@ -5,8 +5,8 @@ import { FaGoogle } from 'react-icons/fa';
 
 const SocialLogin = () => {
     const { googleSignIn } = useAuth();
-    // const axiosPublic = useAxiosPublic();
-    // const navigate = useNavigate();
+    const axiosPublic = useAxiosPublic();
+    const navigate = useNavigate();
     const handleGooogleSignIn = async() => {
       
       try{
@@ -15,14 +15,13 @@ const SocialLogin = () => {
           name: result.user?.displayName,
           email: result.user?.email,
           photo: result.user?.photoURL,
-          role: ''
         }
         console.log(userInfo);
-        // axiosPublic.post('/users', userInfo)
-        // .then(res =>{
-        //   console.log(res.data);
-        //    navigate('/');
-        // })
+        axiosPublic.post('/users', userInfo)
+        .then(res => {
+          console.log(res.data);
+           navigate('/');
+        })
       } catch (error) {
         console.error('Error during Google sign-in:', error);
     }

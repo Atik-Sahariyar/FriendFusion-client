@@ -1,65 +1,73 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useForm } from "react-hook-form";
+import {  useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import SocialLogin from "../Shared/SocialLogin/SocialLogin";
-// import { useForm, SubmitHandler } from "react-hook-form"
-
-const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
-const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
-
+import useGenerateImgURL from "../../Hooks/useGenerateImgURL";
 
 const SignUp = () => {
+    const [ photo, setPhoto ] = useState();
+    const [ profilePic, setProfilePic] = useState(null);
     const { register, handleSubmit, reset, formState: { errors } } = useForm()
     const { createUser, updateUserProfiole } = useContext(AuthContext);
     const navigate = useNavigate();
     const axiosPublic = useAxiosPublic();
 
+    const imgURL = useGenerateImgURL(photo || {});
+    useEffect(() => {
+       try{
+        imgURL.then(url => {
+            setProfilePic(url)
+        })
+       } catch (error){
+         console.log(error);
+
+       }
+    },[imgURL]);
+    
     // sign up sunftion
     const onSubmit = async(data) => {
         const email = data.email;
         const password = data.password;
         const imageFiile = { image: data.profilePic[0] }
-        const res = await axiosPublic.post(image_hosting_api, imageFiile, {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
-        });
-        const profilePic = res.data.data.display_url
+        setPhoto(imageFiile);
         createUser(email, password)
-            .then(() => {
-            
-                updateUserProfiole(data.name, profilePic)
-                    .then(() => {
-                        const userInfo = {
-                            name: data.name,
-                            email: data.email,
-                            profilePic: data.profilePic
-                        }
-                        console.log(userInfo);
-                        // axiosPublic.post('/users', userInfo)
-                        //     .then(res => {
-                        //         console.log(res.data);
-                        //         if (res.data?._id) {
-                        //             Swal.fire('Sign up successfull')
-                        //             navigate('/');
-                        //             reset();
-                        //         }
-                        //     })
+            .then(async() => {
+                  
+              if(profilePic){
+                updateUserProfiole(data.name, profilePic )
+                .then(() => {
+                    const userInfo = {
+                        name: data.name,
+                        email: data.email,
+                        photo: profilePic
+                    }
+                    console.log('user info: ', userInfo);
+                    axiosPublic.post('/users', userInfo)
+                        .then(res => {
+                            console.log(res.data);
+                            if (res.data?._id) {
+                                Swal.fire('Sign up successfull')
+                                navigate('/');
+                                reset();
+                            }
+                        })
 
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    })
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+              }
             })
     }
+   
 
     return (
         <section className="signup-section">
-            <Helmet><title>Bistro Boss | SignUp</title></Helmet>
+            <Helmet><title>FriendFusion | SignUp</title></Helmet>
 
             <div className="hero min-h-screen bg-base-200">
          
@@ -84,7 +92,7 @@ const SignUp = () => {
                                 <label className="label">
                                     <span className="label-text">Photo URL</span>
                                 </label>
-                                <input type="text" {...register('photoURL', { required: true })} name="photoURL" placeholder="Enter your name" className="input input-bordered" />
+                                <input type="text" {...register('photoURL', { required: true } )} name="photoURL" placeholder="Enter your name" className="input input-bordered" />
                                 {errors.photoURL && <span className=" text-red-500">Photo URL is required</span>}
                             </div> */}
                             <div className="form-control">
