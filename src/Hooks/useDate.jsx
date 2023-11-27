@@ -9,13 +9,13 @@ const useDate = () => {
         const minutes = String(now.getMinutes()).padStart(2, '0');
         const seconds = String(now.getSeconds()).padStart(2, '0');
       
-        const formattedDateTime = `${hours}:${minutes}:${seconds} ${year}-${month}-${day} `;
+        const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds} `;
         return formattedDateTime;
       };
       
       const currentDateTime = getCurrentDateTime();
 
-    return currentDateTime
+    return currentDateTime;
 };
 
 export default useDate;

@@ -23,7 +23,6 @@ const NavBar = () => {
         <li><NavLink to="/menu">Membership</NavLink></li>
         {
             !user && <li><NavLink to="/login">Join Us</NavLink></li>
-
         }
 
         {/*     {
@@ -35,24 +34,11 @@ const NavBar = () => {
         <li><NavLink to="/dashboard/my-cart">
             <button className="flex gap-1 items-center">
                 {/* TODO: icon */}
-                <div className="badge badge-secondary ">+{5}</div>
+                <div className="badge  ">+{5}</div>
             </button>
         </NavLink>
         </li>
-        {/* 
-        {
-            user ?
-                <>
 
-                    <li><button onClick={handleLogOut} className="btn btn-ghost">Logout</button></li>
-
-                </>
-                :
-                <>
-                    <li><NavLink to="/login">Login</NavLink></li>
-                    <li><NavLink to="/signup">SignUp</NavLink></li>
-                </>
-        } */}
 
     </>
     return (
@@ -122,24 +108,6 @@ export default NavBar;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import { NavLink } from "react-router-dom";/*  */
 // const NavBar = () => {
 
 //     const navLinks = <>

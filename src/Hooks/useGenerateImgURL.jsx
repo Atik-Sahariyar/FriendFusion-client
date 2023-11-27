@@ -5,25 +5,32 @@ const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const useGenerateImgURL = async(imageFiile) => {
+    console.log(imageFiile);
     const [ imgURL, setImgURL ] = useState();
-   
+    const [ loading , setLoading ] = useState(true)
    useEffect(() => {
-    const imageURL = async() =>{      
-        const res = await axios.post(image_hosting_api, imageFiile, {   
-            headers: {
-                'content-type': 'multipart/form-data'
+    const imageURL = async() =>{ 
+        if(imageFiile){
+            const res = await axios.post(image_hosting_api, imageFiile, {   
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            });    
+            if(res?.data?.data?.display_url){
+                setImgURL( res?.data?.data?.display_url)
+                setLoading(false)
             }
-        });        
-        setImgURL( res?.data?.data?.display_url)
+        }    
+     
+        
     }
     imageURL();
 
    }, [imageFiile])
 
   
-
-  
-    return imgURL;
+   console.log(imgURL);
+    return {imgURL, loading};
   
 };
 

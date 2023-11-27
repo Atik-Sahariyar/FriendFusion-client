@@ -1,49 +1,49 @@
-import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import {  useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../Provider/AuthProvider";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
 import SocialLogin from "../Shared/SocialLogin/SocialLogin";
-import useGenerateImgURL from "../../Hooks/useGenerateImgURL";
+import axios from "axios";
+import useAuth from "../../Hooks/useAuth";
+// import useGenerateImgURL from "../../Hooks/useGenerateImgURL";
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const SignUp = () => {
-    const [ photo, setPhoto ] = useState();
-    const [ profilePic, setProfilePic] = useState(null);
     const { register, handleSubmit, reset, formState: { errors } } = useForm()
-    const { createUser, updateUserProfiole } = useContext(AuthContext);
+    const { createUser, updateUserProfiole } = useAuth();
     const navigate = useNavigate();
     const axiosPublic = useAxiosPublic();
+  
 
-    const imgURL = useGenerateImgURL(photo || {});
-    useEffect(() => {
-       try{
-        imgURL.then(url => {
-            setProfilePic(url)
-        })
-       } catch (error){
-         console.log(error);
 
-       }
-    },[imgURL]);
-    
     // sign up sunftion
     const onSubmit = async(data) => {
         const email = data.email;
         const password = data.password;
         const imageFiile = { image: data.profilePic[0] }
-        setPhoto(imageFiile);
+      
+        const url = await axios.post(image_hosting_api, imageFiile, {   
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }); 
+        
+        if(url?.data){
+      
+           const photoURL  =  url.data?.data?.display_url;
+           console.log(photoURL);
         createUser(email, password)
             .then(async() => {
                   
-              if(profilePic){
-                updateUserProfiole(data.name, profilePic )
+         
+                updateUserProfiole(data.name, photoURL )
                 .then(() => {
                     const userInfo = {
                         name: data.name,
                         email: data.email,
-                        photo: profilePic
+                        photo: photoURL
                     }
                     console.log('user info: ', userInfo);
                     axiosPublic.post('/users', userInfo)
@@ -60,8 +60,11 @@ const SignUp = () => {
                 .catch(error => {
                     console.log(error);
                 })
-              }
-            })
+               }
+         
+              
+            )
+        }
     }
    
 
@@ -72,7 +75,7 @@ const SignUp = () => {
             <div className="hero min-h-screen bg-base-200">
          
                 <div className="hero-content flex-col">      
-                <h3 className=" text-center my-6 text-3xl">Please SignUp</h3>  
+                <h3 className=" text-center my-6 text-3xl">Please Sign Up</h3>  
                     <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                         <form onSubmit={handleSubmit(onSubmit)} className="card-body">
                             <div className="form-control">
@@ -88,13 +91,7 @@ const SignUp = () => {
                                 </label>
                                 <input {...register('profilePic')} type="file" className=" file-input input-bordered w-full" required />
                             </div>
-                            {/*  <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Photo URL</span>
-                                </label>
-                                <input type="text" {...register('photoURL', { required: true } )} name="photoURL" placeholder="Enter your name" className="input input-bordered" />
-                                {errors.photoURL && <span className=" text-red-500">Photo URL is required</span>}
-                            </div> */}
+                    
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Email</span>

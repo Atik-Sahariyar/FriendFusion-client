@@ -1,13 +1,15 @@
-import NavBar from "../../Shared/NavBar/NavBar";
+
 import Banner from "../Banner/Banner";
-import Posts from "../Posts/Posts";
+import AllPosts from "../Posts/AllPosts";
+import Tags from "../TagSection/Tags";
 
 const Home = () => {
     return (
         <div>
-            <NavBar></NavBar>
+        
             <Banner></Banner>
-            <Posts></Posts>
+            <Tags></Tags>
+            <AllPosts></AllPosts>
         </div>
     );
 };
