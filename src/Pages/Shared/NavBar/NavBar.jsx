@@ -20,24 +20,11 @@ const NavBar = () => {
     }
     const navLinks = <>
         <li> <NavLink to="/"> Home</NavLink> </li>
-        <li><NavLink to="/menu">Membership</NavLink></li>
+        <li><NavLink to="/membership">Membership</NavLink></li>
         {
             !user && <li><NavLink to="/login">Join Us</NavLink></li>
         }
 
-        {/*     {
-            user && isAdmin && <li><NavLink to="/dashboard/adminHome">Dashboard</NavLink></li>
-        }
-        {
-           user && !isAdmin &&   <li><NavLink to="/dashboard/userHome">Dashboard</NavLink></li>
-        } */}
-        <li><NavLink to="/dashboard/my-cart">
-            <button className="flex gap-1 items-center">
-                {/* TODO: icon */}
-                <div className="badge  ">+{5}</div>
-            </button>
-        </NavLink>
-        </li>
 
 
     </>
@@ -54,7 +41,7 @@ const NavBar = () => {
                 </div>
                 <div className=" flex gap-1">
                     <img src="https://i.ibb.co/ydSCFSR/rsz-2firendfusion-logo2.jpg" className=" w-12  rounded-br-lg rounded-tl-lg" alt="" />
-                    <h3 className="btn btn-ghost normal-case text-xl">FriendFusion</h3>
+                    <h3 className="btn btn-ghost hidden md:block lg:block normal-case text-xl">FriendFusion</h3>
                 </div>
             </div>
             <div className="navbar-center hidden md:flex">
@@ -85,8 +72,8 @@ const NavBar = () => {
                     {
                         user && <div className="dropdown dropdown-end">
                             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                                <div className="w-10 rounded-full">
-                                    <img alt="Tailwind CSS Navbar component" src={user?.photoURL} />
+                                <div className="">
+                                    <img className="w-16 rounded-full" alt="User image" src={user?.photoURL} />
                                 </div>
                             </label>
                             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
@@ -108,7 +95,6 @@ export default NavBar;
 
 
 
-// const NavBar = () => {
 
 //     const navLinks = <>
 //         <li> <NavLink to="/"> Home</NavLink> </li>

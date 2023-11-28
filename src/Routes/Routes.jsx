@@ -14,6 +14,8 @@ import AdminProfile from "../Pages/Dashboard/AdminDashboard/AdminProfile/AdminPr
 import ManageUsers from "../Pages/Dashboard/AdminDashboard/ManageUsers/ManageUsers";
 import Activites from "../Pages/Dashboard/AdminDashboard/Activities/Activites";
 import Announcement from "../Pages/Dashboard/AdminDashboard/Announcment/Announcement";
+import Comments from "../Pages/Dashboard/UserDashboard/MyPosts/Comments";
+import Membership from "../Pages/Membership/Membership";
 
 
 const router = createBrowserRouter([
@@ -36,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: 'postDetails/:id',
         element: <PrivateRoute><PostDetails></PostDetails></PrivateRoute>
+      },
+      {
+        path: 'membership',
+        element: <PrivateRoute> <Membership></Membership> </PrivateRoute>
       }
     ]
   },
@@ -55,6 +61,10 @@ const router = createBrowserRouter([
       {
         path: 'my-posts',
         element: <MyPosts></MyPosts>
+      },
+      {
+        path: 'allComments/:id',
+        element: <Comments></Comments>
       },
       // admin only routes
       {

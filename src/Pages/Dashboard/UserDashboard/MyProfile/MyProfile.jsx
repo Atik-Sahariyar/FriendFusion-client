@@ -1,20 +1,33 @@
 import useAuth from '../../../../Hooks/useAuth';
 import useAxiosSecure from '../../../../Hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
 import RecentPosts from './RecentPosts';
 
 const MyProfile = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-
-  const { data: posts } = useQuery({
+  const [ recentPosts, setRecentPosts ] = useState([]);
+  const { data: posts, isPending, refetch: reload } = useQuery({
     queryKey: [user.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/posts/myposts/${user?.email}`);
       return res?.data;
     }
-  })
-  const recentPosts = posts.slice(0,3);
+  });
+  
+   
+  useEffect(() => {
+    if (isPending) {
+      return /*  <p className=' text-cennter text-2xl mt-16'>Loading...</p> */
+    }
+    if(posts?.length > 3){
+      const newPosts = posts.slice(0, 3);
+      setRecentPosts(newPosts)
+    } else {
+      setRecentPosts(posts)
+    }
+  }, [ isPending, posts])
 
 
   return (
@@ -44,9 +57,12 @@ const MyProfile = () => {
       <div>
         <h3 className="text-xl font-semibold mb-4 text-center">Recent Posts</h3>
         <div className="grid grid-cols-1 gap-6">
-          {recentPosts?.map((post) => <RecentPosts key ={post._id} post = {post}></RecentPosts >)}
+          {
 
-      </div>
+            recentPosts?.map((post) => <RecentPosts key={post._id} post={post} reload = {reload}></RecentPosts >)
+          }
+
+        </div>
       </div>
     </div>
   );

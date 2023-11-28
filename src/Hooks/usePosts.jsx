@@ -8,8 +8,6 @@ const usePosts = (page , limit = 5) => {
         queryKey: ['post', page, limit], // Include page and limit in the query key
         queryFn: async() => {
             const res = await axiosPublic.get(`/posts?page=${page}&limit=${limit}`);
-            console.log(res?.data);
-
             return res?.data;
         }
     })

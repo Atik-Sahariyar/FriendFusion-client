@@ -8,11 +8,12 @@ const useComments = (postId) => {
         queryKey: ['postId',postId],
         queryFn: async() =>{
             const res = await axiosSecure.get(`/comments/${postId}`);
-            console.log(res?.data);
             return res?.data
         }
     })
-    return {comments, commentsLoading, commentRefetch};
+    const totalComments = comments?.length;
+
+    return {comments, commentsLoading, commentRefetch, totalComments};
 };
 
 export default useComments;

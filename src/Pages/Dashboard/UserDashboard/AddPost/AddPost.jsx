@@ -10,12 +10,14 @@ import SectionTitle from '../../../../components/SectionTitle/SectionTitle';
 import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
 import Select from 'react-select';
+import useMember from '../../../../Hooks/useMember';
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const AddPost = () => {
     const [selectedTag, setSelectedTag] = useState(null); 
+    const isMember = useMember();
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const axiosSecure = useAxiosSecure();
     const currentDateTime = useDate();
@@ -24,22 +26,21 @@ const AddPost = () => {
     const { data: postCount, refetch: refetchCount } = useQuery({
         queryKey: [user?.email],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/posts/postCount/${user?.email}`);
+            const res = await axiosSecure.get(`/postCount/${user?.email}`);
             return res?.data[0]?.postCount
         }
     });
-
-
+ 
+    console.log('total post: ', postCount);
         // Options for the dropdown
         const tagOptions = [
-            { value: '#education', label: '#education' },
-            { value: '#webDevelopment', label: '#general' },
-            { value: '#general', label: '#general' },
-            { value: '#softwareDevelopment', label: '#softwareDevelopment' },
-            { value: '#webDesgin', label: '#webDesgin' },
-            { value: '#computer', label: '#computer' },
-           
-        ];
+            { value: 'education', label: 'education' },
+            { value: 'webDevelopment', label: 'webDevelopment' },
+            { value: 'general', label: 'general' },
+            { value: 'softwareDevelopment', label: 'softwareDevelopment' },
+            { value: 'webDesgin', label: 'webDesgin' },
+            { value: 'computer', label: 'computer' },
+                   ];
         const handleTagChange = (selectedOption) => {
             setSelectedTag(selectedOption);
         };
@@ -91,11 +92,13 @@ const AddPost = () => {
         }
 
     }
+   
 
+    console.log(isMember, postCount);
     return (
         <div className="add-post-container">
             <Helmet> <title>Post | FriemdFusion</title></Helmet>
-            {postCount >= 5 ? (
+            {(postCount === undefined || postCount >= 5) && !isMember ? (
                 <div className="membership-cta">
                     <p>Oops! You have reached the maximum number of posts allowed.</p>
                     <Link to="/membership">  <button className=' btn'>Become a Member</button></Link>

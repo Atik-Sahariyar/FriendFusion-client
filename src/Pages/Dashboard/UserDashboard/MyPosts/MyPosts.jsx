@@ -3,24 +3,26 @@ import useAuth from "../../../../Hooks/useAuth";
 import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
 import { FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 const MyPosts = () => {
     const { user } = useAuth()
     const axiosSecure = useAxiosSecure();
-    const { data : posts, isPending,  refetch } = useQuery({
+    const { data: posts, isPending, refetch } = useQuery({
         queryKey: [user?.email],
         queryFn: async () => {
-            const res =  await axiosSecure.get(`/posts/myposts/${user?.email}`);
+            const res = await axiosSecure.get(`/posts/myposts/${user?.email}`);
             return res.data
         }
     });
-    
-    if(isPending){
-        return <p className=" text-center my-16">Loading...</p>
+      
+    if (isPending || !posts) {
+        return <div className=" text-center my-16">Loading...</div>
     }
-    refetch();
-    const handleDeletePost = async(id) => {
-    
+
+   
+    const handleDeletePost = async (id) => {
+
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -47,50 +49,52 @@ const MyPosts = () => {
     }
     return (
         <div>
-        <div className=" flex  justify-evenly my-">
-            <h2 className=" text-3xl">All posts</h2>
-            <h2 className=" text-3xl">Total Posts : {posts?.length}</h2>
+            <div className=" flex  justify-evenly my-">
+                <h2 className=" text-3xl">All posts</h2>
+                <h2 className=" text-3xl">Total Posts : {posts?.length}</h2>
 
-        </div>
-        <div className="overflow-x-auto w-full">
-            <table className="table table-zebra">
-                {/* head */}
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Post Title</th>
-                        <th>Like</th>
-                        <th>Dislike</th>
-                        <th>Share</th>
-                        <th>Comments</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {/* row  */}
-                    { 
-                        posts?.map((post, index) => <tr key={post._id}>
-                            <th>{index + 1}</th>
-                            <td>{post.postTitle}</td>
-                            <td>{post.upVote}</td>
-                            <td>{post.downVote}</td>
-                            <td>{post.share}</td>
-                            <td>
-                                <button className=" btn btn-sm bg-blue-500 text-white hover:bg-blue-700">Comment</button>
-                            </td>
-                           
-                            <td>
-                                <button onClick={() => handleDeletePost(post._id)} className="btn btn-ghost btn-lg">
-                                    <FaTrashAlt className=" text-red-600"></FaTrashAlt>
-                                </button>
-                            </td>
-                        </tr>)
-                    }
+            </div>
+            <div className="overflow-x-auto w-full">
+                <table className="table table-zebra">
+                    {/* head */}
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Post Title</th>
+                            <th>Like</th>
+                            <th>Dislike</th>
+                            <th>Share</th>
+                            <th>Comments</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {/* row  */}
+                        {
+                           !posts ? '' : posts.map((post, index) => <tr key={post._id}>
+                                <th>{index + 1}</th>
+                                <td>{post.postTitle}</td>
+                                <td>{post.upVote}</td>
+                                <td>{post.downVote}</td>s
+                                <td>{post.share}</td>
+                                <td>
+                                    <Link to = {`/dashboard/allComments/${post._id}`}>
+                                        <button className=" btn btn-sm bg-blue-500 text-white hover:bg-blue-700">Comment</button>
+                                    </Link>
+                                </td>
 
-                </tbody>
-            </table>
+                                <td>
+                                    <button onClick={() => handleDeletePost(post._id)} className="btn btn-ghost btn-lg">
+                                        <FaTrashAlt className=" text-red-600"></FaTrashAlt>
+                                    </button>
+                                </td>
+                            </tr>)
+                        }
+
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
     );
 };
 

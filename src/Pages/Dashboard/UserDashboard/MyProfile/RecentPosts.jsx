@@ -5,9 +5,9 @@ import useAuth from "../../../../Hooks/useAuth";
 import { FacebookShareButton } from "react-share";
 import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
 import useDate from "../../../../Hooks/useDate";
+import PropTypes from 'prop-types';
 
-
-const RecentPosts = (post) => {
+const RecentPosts = ({post, reload}) => {
     const [liked, setLiked] = useState(false);
     const [disliked, setDisliked] = useState(false);
     const [showCommentInput, setShowCommentInput] = useState(false);
@@ -16,14 +16,15 @@ const RecentPosts = (post) => {
     const currentDateTime = useDate();
     const axiosSecure = useAxiosSecure();
     const shareUrl = window.location.href;
+   
     // getting comments of this post 
-    const { comments, commentsLoading, commentRefetch } = useComments(post._id);
+    const { comments, commentsLoading, commentRefetch, totalComments } = useComments(post._id);
 
     // handle loading
     if ( commentsLoading) {
         return <p className=" text-center">Loading...</p>
     }
-    let { _id, authorName, authorImg, postTitle, postDescription, tag, postImg, postTime, upVote, downVote } = post.post;
+    let { _id, authorName, authorImg, postTitle, postDescription, tag, postImg, postTime, upVote, downVote } = post;
 
   
     // handle comments
@@ -31,7 +32,7 @@ const RecentPosts = (post) => {
         setShowCommentInput(!showCommentInput);
 
     };
-
+   
     // handle comment submuit
     const handleCommentSubmit = async (data) => {
         const comment = data.comment;
@@ -63,8 +64,9 @@ const RecentPosts = (post) => {
 
             }
             upVote++;
-
+            await reload();
             setLiked(true);
+
         } else {
             if (upVote > 0) {
                 upVote--;
@@ -74,7 +76,7 @@ const RecentPosts = (post) => {
         }
         const res = await axiosSecure.patch(`/posts/update/${id}`, { upVote, downVote });
         if (res?.data) {
-          commentRefetch()
+          reload();
         }
 
         console.log(`Upvotes: ${upVote}, Downvotes: ${downVote}`);
@@ -90,7 +92,7 @@ const RecentPosts = (post) => {
                 }
             }
             downVote++;
-
+            reload();
             setDisliked(true);
         } else {
             if (downVote > 0) {
@@ -100,11 +102,11 @@ const RecentPosts = (post) => {
         }
         const res = await axiosSecure.patch(`/posts/update/${id}`, { upVote, downVote });
         if (res?.data) {
-            commentRefetch()
+          reload();
         }
         console.log(`Upvotes: ${upVote}, Downvotes: ${downVote}`);
     };
-console.log(post?.post);
+
     return (
         <div>
              
@@ -133,7 +135,7 @@ console.log(post?.post);
                   <button onClick={() => handleDislikeButton(_id)} className={`hover:btn hover:btn-sm ${disliked ? 'bg-blue-500 text-white px-3 my-1' : ''}`}>
                     Dislike ({downVote})
                   </button>
-                  <button onClick={handleShowComments} className=" hover:btn hover:btn-sm ">Comment</button>
+                  <button onClick={handleShowComments} className=" hover:btn hover:btn-sm ">Comment { totalComments ? `(${totalComments})` : '' }</button>
                   <FacebookShareButton url={shareUrl} className=" hover:btn  hover:btn-sm">Share</FacebookShareButton>
                 </div>
                 {
@@ -172,5 +174,10 @@ console.log(post?.post);
         </div>
     );
 };
+
+RecentPosts.propTypes = {
+  reload: PropTypes.func
+}
+
 
 export default RecentPosts;

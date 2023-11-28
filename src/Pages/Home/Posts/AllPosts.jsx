@@ -7,16 +7,13 @@ const AllPosts = () => {
   const [sortedPosts, setSortedPosts] = useState(false);
   const { postsData, refetch, loading } = usePosts(currentPage, 5);
 
-  console.log(postsData);
   if(loading ){
-    console.log(loading);
     return <p className=' text-center'>Loading....</p>
   }
-  console.log(loading);
+
   const totalPost = postsData?.totalPosts || 0;
   const pageNumbers = Array.from({ length: Math.ceil(totalPost / 5) }, (_, index) => index + 1);
-  console.log(' page number: ',pageNumbers);
-  console.log(totalPost);
+  
 
     const handlePagination = pageNumber => {
       setCurrentPage(pageNumber);
@@ -37,8 +34,8 @@ const AllPosts = () => {
   const handleSortByPopularity = () => {
     setSortedPosts(!sortedPosts)
   }
-  console.log("new post:  ",postsData?.posts);
-  console.log('populare: ', postsData?.popularPosts);
+
+  
   return (
     <div className="container mx-auto py-8">
       <div className=' flex justify-center'>

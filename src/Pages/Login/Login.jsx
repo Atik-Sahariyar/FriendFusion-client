@@ -1,5 +1,3 @@
-import {  useEffect, useState } from 'react';
-import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Swal from 'sweetalert2';
@@ -7,15 +5,11 @@ import SocialLogin from '../Shared/SocialLogin/SocialLogin';
 import useAuth from '../../Hooks/useAuth';
 
 const Login = () => {
-    const [disabled, setDisabled] = useState(true);
     const { signIn } = useAuth()
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || '/';
 
-    useEffect(() => {
-        loadCaptchaEnginge(6);
-    }, [])
 
     // user login function
     const handleLogin = event => {
@@ -33,14 +27,6 @@ const Login = () => {
             })
     }
 
-    // capthca validation function
-    const handleValidateCaptcha = (e) => {
-        // < ! --let's assume there is an HTML input text box with id 'user_captcha_input' to get user input -->   
-        const userCaptchaValue = e.target.value;
-        if (validateCaptcha(userCaptchaValue)) {
-            setDisabled(false)
-        }
-    }
 
     return (
         <>
@@ -67,16 +53,9 @@ const Login = () => {
                                     <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
                                 </label>
                             </div>
-                            <div className="form-control">
-                                <label className="label">
-                                    <LoadCanvasTemplate />
-                                </label>
-                                <input onBlur={handleValidateCaptcha} type="text"  name="captcha" placeholder="captcha" className="input input-bordered" required />
-                            </div>
                             <div className="form-control mt-6">
-                                <input disabled={disabled} type="submit" className="btn btn-primary" value="Login" />
+                                <input  type="submit" className="btn btn-primary" value="Login" />
                             </div>
-                          
                         </form>
                         <SocialLogin></SocialLogin>
                         <p className='text-center mb-5'>

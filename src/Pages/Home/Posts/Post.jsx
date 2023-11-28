@@ -1,11 +1,11 @@
 
 import { Link } from "react-router-dom";
+import useComments from "../../../Hooks/useComments";
 
 const Post = ({ post }) => {
 
     let { _id, authorName, authorImg, postTitle, tag, postImg, postTime, upVote, downVote } = post;
-
-
+    const { totalComments } = useComments(_id);
 
 
     return (
@@ -23,7 +23,7 @@ const Post = ({ post }) => {
                             </div>
                         </div>
                         <h1 className="text-3xl font-bold mb-4">{postTitle}</h1>
-                        <p>{tag}</p>
+                        <p>#{tag}</p>
                         <img src={postImg} alt="" className=" h-[350px] w-full" />
                         <div className=' flex justify-between mx-1'>
                             <button className={`hover:bg-blue-500 hover:text-white px-3 my-1`}>
@@ -32,7 +32,7 @@ const Post = ({ post }) => {
                             <button className={`hover:bg-blue-500 hover:text-white px-3 my-1`}>
                                 Dislike ({downVote})
                             </button>
-                            <button className=" hover:btn ">Comment</button>
+                            <button className=" hover:btn ">Comment {totalComments ? `(${totalComments})` : '' }</button>
                             <button className=" hover:btn ">Share</button>
                         </div>
                     </div>
