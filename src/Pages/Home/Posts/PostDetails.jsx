@@ -7,11 +7,13 @@ import useDate from "../../../Hooks/useDate";
 import { useForm } from "react-hook-form";
 import useComments from "../../../Hooks/useComments";
 import { FacebookShareButton } from 'react-share';
+import useSearch from "../../../Hooks/useSearch";
 
 const PostDetails = () => {
     const [liked, setLiked] = useState(false);
     const [disliked, setDisliked] = useState(false);
     const [showCommentInput, setShowCommentInput] = useState(false);
+    const { setSearchTag } = useSearch()
     const { register, handleSubmit, reset } = useForm();
     const { user } = useAuth();
     const { id } = useParams();
@@ -27,12 +29,14 @@ const PostDetails = () => {
         }
     });
 
-    const { comments, commentsLoading, commentRefetch} = useComments(id);
+    const { comments, commentsLoading, commentRefetch } = useComments(id);
     // handle loading
     if (isPending || commentsLoading) {
         return <p className=" text-center">Loading...</p>
     }
     let { _id, authorName, authorImg, postTitle, postDescription, tag, postImg, postTime, upVote, downVote } = post;
+   
+
     const totalComments = comments?.length;
     // handle comments
     const handleShowComments = () => {
@@ -129,21 +133,21 @@ const PostDetails = () => {
                     {
                         <p>{postDescription}</p>
                     }
-                    <p>{tag}</p>
+                    <button onClick={() => setSearchTag(tag)} className=" text-blue-600 underline"> #{tag}</button>
                     <img src={postImg} alt="" className=" h-[350px] w-full" />
                     <div className=' flex justify-between mx-1'>
-                        
-                       <div>
-                       <button onClick={() => handleLikeButton(_id)} className={`hover:btn hover:btn-sm ${liked ? 'bg-blue-500 text-white px-3 my-1 ' : ''}`}>
-                            Like ({upVote})
-                        </button>
-                       </div>
-                      <div>
-                      <button onClick={() => handleDislikeButton(_id)} className={`hover:btn hover:btn-sm ${disliked ? 'bg-blue-500 text-white px-3 my-1' : ''}`}>
-                            Dislike ({downVote})
-                    </button>
-                      </div>
-                        <button onClick={handleShowComments} className=" hover:btn hover:btn-sm ">Comment { totalComments ? `(${totalComments})` : ''}</button>
+
+                        <div>
+                            <button onClick={() => handleLikeButton(_id)} className={`hover:btn hover:btn-sm ${liked ? 'bg-blue-500 text-white px-3 my-1 ' : ''}`}>
+                                Like ({upVote})
+                            </button>
+                        </div>
+                        <div>
+                            <button onClick={() => handleDislikeButton(_id)} className={`hover:btn hover:btn-sm ${disliked ? 'bg-blue-500 text-white px-3 my-1' : ''}`}>
+                                Dislike ({downVote})
+                            </button>
+                        </div>
+                        <button onClick={handleShowComments} className=" hover:btn hover:btn-sm ">Comment {totalComments ? `(${totalComments})` : ''}</button>
                         <FacebookShareButton url={shareUrl} className=" hover:btn  hover:btn-sm">Share</FacebookShareButton>
                     </div>
                     {

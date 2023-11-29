@@ -8,19 +8,19 @@ import { Link } from "react-router-dom";
 const MyPosts = () => {
     const { user } = useAuth()
     const axiosSecure = useAxiosSecure();
-    const { data: posts, isPending, refetch } = useQuery({
+    const { data: posts = [], isPending, refetch } = useQuery({
         queryKey: [user?.email],
         queryFn: async () => {
             const res = await axiosSecure.get(`/posts/myposts/${user?.email}`);
             return res.data
         }
     });
-      
+
     if (isPending || !posts) {
         return <div className=" text-center my-16">Loading...</div>
     }
 
-   
+
     const handleDeletePost = async (id) => {
 
         Swal.fire({
@@ -71,14 +71,14 @@ const MyPosts = () => {
                     <tbody>
                         {/* row  */}
                         {
-                           !posts ? '' : posts.map((post, index) => <tr key={post._id}>
+                            !posts ? '' : posts.map((post, index) => <tr key={post._id}>
                                 <th>{index + 1}</th>
                                 <td>{post.postTitle}</td>
                                 <td>{post.upVote}</td>
                                 <td>{post.downVote}</td>s
                                 <td>{post.share}</td>
                                 <td>
-                                    <Link to = {`/dashboard/allComments/${post._id}`}>
+                                    <Link to={`/dashboard/allComments/${post._id}`}>
                                         <button className=" btn btn-sm bg-blue-500 text-white hover:bg-blue-700">Comment</button>
                                     </Link>
                                 </td>

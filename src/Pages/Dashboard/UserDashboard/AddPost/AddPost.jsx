@@ -24,22 +24,26 @@ const AddPost = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const { data: postCount, refetch: refetchCount } = useQuery({
-        queryKey: [user?.email],
-        queryFn: async () => {
-            const res = await axiosSecure.get(`/postCount/${user?.email}`);
-            return res?.data[0]?.postCount
+        queryKey: ['postCount', user?.email],
+        queryFn: async() => {
+            const res  = await axiosSecure.get(`/postCount/${user?.email}`);
+            
+            return res.data.postCount;
         }
-    });
- 
+    })
+    
     console.log('total post: ', postCount);
         // Options for the dropdown
         const tagOptions = [
             { value: 'education', label: 'education' },
+            { value: 'programming', label: 'programming' },
             { value: 'webDevelopment', label: 'webDevelopment' },
             { value: 'general', label: 'general' },
             { value: 'softwareDevelopment', label: 'softwareDevelopment' },
             { value: 'webDesgin', label: 'webDesgin' },
             { value: 'computer', label: 'computer' },
+            { value: 'cybersecurity', label: 'cybersecurity' },
+            { value: 'technology', label: 'technology' },
                    ];
         const handleTagChange = (selectedOption) => {
             setSelectedTag(selectedOption);
@@ -132,6 +136,7 @@ const AddPost = () => {
                                     value={selectedTag}
                                     onChange={handleTagChange}
                                     placeholder="Select a tag"
+                                    required
                                 />
                             </div>
                             <div className="  form-control w-full my-6">

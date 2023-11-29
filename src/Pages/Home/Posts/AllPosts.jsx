@@ -7,6 +7,7 @@ const AllPosts = () => {
   const [sortedPosts, setSortedPosts] = useState(false);
   const { postsData, refetch, loading } = usePosts(currentPage, 5);
 
+
   if(loading ){
     return <p className=' text-center'>Loading....</p>
   }
@@ -35,11 +36,19 @@ const AllPosts = () => {
     setSortedPosts(!sortedPosts)
   }
 
-  
+  console.log('post data: ', postsData);
   return (
     <div className="container mx-auto py-8">
       <div className=' flex justify-center'>
-        <button onClick={() => handleSortByPopularity(!sortedPosts)} className=' px-3 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-700'>{ sortedPosts ? 'Sort by new post': 'Sort By Popularity'}</button>
+        {
+          postsData?.posts?.length > 0 ?  <button onClick={() => handleSortByPopularity(!sortedPosts)} className=' px-3 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-700'>{ sortedPosts ? 'Sort by new post': 'Sort By Popularity'}</button>
+          :
+        <div className="flex flex-col items-center justify-center mt-8">
+          <p className="text-lg font-semibold text-gray-500 mb-4">No posts available.</p>
+          <p className="text-gray-600">Start exploring and sharing your thoughts!</p>
+        </div>
+
+        }
       </div>
       <div className="grid gap-4">
         {
@@ -53,25 +62,27 @@ const AllPosts = () => {
             </span>
         }
       </div>
-      <div className="flex justify-center mt-4">
-      <button onClick={handlePrevPage} className="mx-1 px-3 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-700">
-          Prev
-        </button>
-        { pageNumbers.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => handlePagination(index + 1)}
-            className={`mx-1 px-3 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-700 ${
-              currentPage === index + 1 ? 'bg-blue-700' : ''
-            }`}
-          >
-            {index + 1}
-          </button>
-        ))}
-          <button onClick={handleNextPage} className="mx-1 px-3 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-700">
-          Next
-        </button>
-      </div>
+     {
+       pageNumbers?.length > 1 && <div className="flex justify-center mt-4">
+       <button onClick={handlePrevPage} className="mx-1 px-3 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-700">
+           Prev
+         </button>
+         { pageNumbers.map((_, index) => (
+           <button
+             key={index}
+             onClick={() => handlePagination(index + 1)}
+             className={`mx-1 px-3 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-700 ${
+               currentPage === index + 1 ? 'bg-blue-700' : ''
+             }`}
+           >
+             {index + 1}
+           </button>
+         ))}
+           <button onClick={handleNextPage} className="mx-1 px-3 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-700">
+           Next
+         </button>
+       </div>
+     }
     </div>
   );
 };

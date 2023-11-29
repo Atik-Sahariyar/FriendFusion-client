@@ -16,6 +16,7 @@ import Activites from "../Pages/Dashboard/AdminDashboard/Activities/Activites";
 import Announcement from "../Pages/Dashboard/AdminDashboard/Announcment/Announcement";
 import Comments from "../Pages/Dashboard/UserDashboard/MyPosts/Comments";
 import Membership from "../Pages/Membership/Membership";
+import Announcements from "../Pages/Home/Announcements/Announcements";
 
 
 const router = createBrowserRouter([
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <SignUp></SignUp>
+      },
+      {
+        path: "announcements",
+        element: <Announcements></Announcements>
       },
       {
         path: 'postDetails/:id',

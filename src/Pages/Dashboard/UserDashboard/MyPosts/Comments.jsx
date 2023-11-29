@@ -8,7 +8,7 @@ const Comments = () => {
     const [ readMore , setReadMore ] = useState(false);
     const axiosSecure = useAxiosSecure();
     const { id } = useParams();
-    const { data: comments, isPending } = useQuery({
+    const { data: comments = [], isPending } = useQuery({
         queryKey: ['postId', id],
         queryFn: async () => {
             const res = await axiosSecure.get(`/comments/${id}`);
