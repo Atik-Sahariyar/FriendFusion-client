@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import useComments from "../../../Hooks/useComments";
 import { FacebookShareButton } from 'react-share';
 import useSearch from "../../../Hooks/useSearch";
+import { Helmet } from "react-helmet-async";
 
 const PostDetails = () => {
     const [liked, setLiked] = useState(false);
@@ -117,7 +118,9 @@ const PostDetails = () => {
     };
 
     return (
-        <div className="container mx-auto   w-11/12 md:w-2/3 lg:w-1/2  py-8 my-3">
+       <div>
+        <Helmet><title>FriendFusion | PostDetails</title></Helmet>
+         <div className="container mx-auto   w-11/12 md:w-2/3 lg:w-1/2  py-8 my-3">
             {post ? (
                 <div className="bg-white p-6 shadow-md">
                     <div>
@@ -184,6 +187,7 @@ const PostDetails = () => {
                 <p>Loading...</p>
             )}
         </div>
+       </div>
     );
 };
 

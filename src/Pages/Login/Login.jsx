@@ -30,7 +30,7 @@ const Login = () => {
 
     return (
         <>
-            <Helmet><title>FriendFusion | SignUp</title></Helmet>
+            <Helmet><title>FriendFusion | Login</title></Helmet>
              
             <div className="hero min-h-screen bg-base-200 ">
                 <div className="hero-content mx-auto flex-col lg:w-1/2">

@@ -18,15 +18,11 @@ const NavBar = () => {
             })
     }
     const navLinks = <>
-        <li> <NavLink to="/"> Home</NavLink> </li>
-        <li><NavLink to="/membership">Membership</NavLink></li>
+        <li className=" mx-1"> <NavLink to="/"> Home</NavLink> </li>
+        <li className=" mx-1"><NavLink to="/membership">Membership</NavLink></li>
         {
-            !user && <li><NavLink to="/login">Join Us</NavLink></li>
+            !user && <li className=" mx-1"><NavLink to="/login">Join Us</NavLink></li>
         }
-
-       
-
-
 
     </>
     return (

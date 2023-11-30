@@ -17,7 +17,7 @@ const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_ke
 
 const AddPost = () => {
     const [selectedTag, setSelectedTag] = useState(null); 
-    const isMember = useMember();
+    const{ isMember } = useMember();
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const axiosSecure = useAxiosSecure();
     const currentDateTime = useDate();

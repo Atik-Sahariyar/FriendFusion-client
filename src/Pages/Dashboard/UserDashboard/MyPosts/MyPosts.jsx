@@ -9,7 +9,7 @@ const MyPosts = () => {
     const { user } = useAuth()
     const axiosSecure = useAxiosSecure();
     const { data: posts = [], isPending, refetch } = useQuery({
-        queryKey: [user?.email],
+        queryKey: ['recentPost', user?.displayName],
         queryFn: async () => {
             const res = await axiosSecure.get(`/posts/myposts/${user?.email}`);
             return res.data
@@ -75,7 +75,7 @@ const MyPosts = () => {
                                 <th>{index + 1}</th>
                                 <td>{post.postTitle}</td>
                                 <td>{post.upVote}</td>
-                                <td>{post.downVote}</td>s
+                                <td>{post.downVote}</td>
                                 <td>{post.share}</td>
                                 <td>
                                     <Link to={`/dashboard/allComments/${post._id}`}>

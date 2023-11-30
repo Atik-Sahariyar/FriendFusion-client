@@ -1,33 +1,48 @@
 import useAuth from '../../../../Hooks/useAuth';
 import useAxiosSecure from '../../../../Hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
+// import { useState, useEffect } from 'react';
 import RecentPosts from './RecentPosts';
+import useMember from '../../../../Hooks/useMember';
+import { FaMedal } from 'react-icons/fa';
 
 const MyProfile = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const [ recentPosts, setRecentPosts ] = useState([]);
-  const { data: posts, isPending, refetch: reload } = useQuery({
+  const { isMember } = useMember();
+  let { data: posts = [], isPending, refetch: reload } = useQuery({
     queryKey: [user.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/posts/myposts/${user?.email}`);
       return res?.data;
     }
   });
-  
-   
-  useEffect(() => {
-    if (isPending) {
-      return /*  <p className=' text-cennter text-2xl mt-16'>Loading...</p> */
+  console.log(' recent posts: ', posts);
+
+  if ( isPending) {
+    return <div>Loading</div>
+  }
+
+console.log(' recent posts: ', posts);
+  const recentPosts = async () => {
+    if (posts?.length > 3) {
+      const newPosts = await posts.slice(0, 3);
+      posts = newPosts
     }
-    if(posts?.length > 3){
-      const newPosts = posts.slice(0, 3);
-      setRecentPosts(newPosts)
-    } else {
-      setRecentPosts(posts)
-    }
-  }, [ isPending, posts])
+  }
+  recentPosts();
+
+  // useEffect(() => {
+
+
+  //   if(posts?.length > 3){
+  //     const newPosts = posts.slice(0, 3);
+  //     setRecentPosts(newPosts)
+  //   } else {
+  //     setRecentPosts(posts)
+  //   }
+  // }, [ isPending, posts])
+
 
 
   return (
@@ -40,26 +55,25 @@ const MyProfile = () => {
           <p className="text-gray-600">{user?.email}</p>
         </div>
       </div>
-      {/* <div className="mb-6">
-        {userProfile.badges.bronze && (
+      <div className="mb-6">
+        {!isMember ? (
           <div className="flex justify-center items-center mb-2">
             <FaMedal className="text-yellow-400 mr-2" />
             <p>Bronze Badge</p>
           </div>
-        )}
-        {userProfile.badges.gold && (
+        ) : (
           <div className="flex justify-center items-center mb-2">
             <FaMedal className="text-yellow-600 mr-2" />
             <p>Gold Badge</p>
           </div>
         )}
-      </div> */}
+      </div>
       <div>
         <h3 className="text-xl font-semibold mb-4 text-center">Recent Posts</h3>
         <div className="grid grid-cols-1 gap-6">
           {
 
-            recentPosts?.map((post) => <RecentPosts key={post._id} post={post} reload = {reload}></RecentPosts >)
+            posts?.map((post) => <RecentPosts key={post._id} post={post} reload={reload}></RecentPosts >)
           }
 
         </div>

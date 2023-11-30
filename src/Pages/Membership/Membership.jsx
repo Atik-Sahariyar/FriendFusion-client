@@ -3,16 +3,19 @@ import ChackoutForm from "./ChackoutForm";
 import { loadStripe } from "@stripe/stripe-js";
 import useMember from "../../Hooks/useMember";
 import { FaMedal } from 'react-icons/fa';
+import { Helmet } from "react-helmet-async";
 
 const Membership = () => {
-    const isMember = useMember();
+    const {isMember} = useMember();
     const stripePromise = loadStripe(import.meta.env.VITE_Payment_Gateway_PK);
     const handleError = (error) => {
         console.log('Failed to load Stripe : ', error);
     }
     return (
 
-        <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+      <div>
+        <Helmet><title>FriendFusion | Membership</title></Helmet>
+          <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
             {
                 isMember ? (
                     <div className="text-center">
@@ -58,6 +61,7 @@ const Membership = () => {
             }
 
         </div>
+      </div>
 
     );
 };

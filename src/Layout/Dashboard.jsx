@@ -1,12 +1,15 @@
 import { FaBell, FaBook, FaHome,  FaUpload, FaUser } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
 import useAdmin from "../Hooks/useAdmin";
+import { Helmet } from "react-helmet-async";
 
 
 const Dashboard = () => {
     const [isAdmin] = useAdmin();
     return (
-        <div className="flex">
+       <div>
+        <Helmet><title>FriendFusion | Dashboard</title></Helmet>
+         <div className="flex">
             <div className=" w-64  min-h-screen bg-blue-400 ">
                 <ul className=" p-4">
                     {
@@ -57,6 +60,7 @@ const Dashboard = () => {
                 <Outlet></Outlet>
             </div>
         </div>
+       </div>
     );
 };
 

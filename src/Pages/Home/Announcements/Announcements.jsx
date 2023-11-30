@@ -1,10 +1,13 @@
+import { Helmet } from 'react-helmet-async';
 import useAnnouncements from '../../../Hooks/useAnnouncements';
 
 const Announcements = () => {
   const { announcements } = useAnnouncements();
 
   return (
-    <div className="container mx-auto py-8">
+   <div>
+    <Helmet><title>FriendFusion | Announcements</title></Helmet>
+     <div className="container mx-auto py-8">
       {announcements.length > 0 && (
         <div className="bg-white shadow-md rounded-md p-6">
           <h2 className="text-2xl font-bold mb-4">Announcements</h2>
@@ -19,6 +22,7 @@ const Announcements = () => {
         </div>
       )}
     </div>
+   </div>
   );
 };
 
