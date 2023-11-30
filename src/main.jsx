@@ -11,7 +11,8 @@ import SearchProvider from './Provider/SearchProvider'
 
 ReactModal.setAppElement(document.getElementById('root'));
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
