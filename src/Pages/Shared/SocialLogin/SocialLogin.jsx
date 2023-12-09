@@ -7,8 +7,9 @@ const SocialLogin = () => {
     const { googleSignIn } = useAuth();
     const axiosPublic = useAxiosPublic();
     const navigate = useNavigate();
+
+    // handle google sign in function
     const handleGooogleSignIn = async() => {
-      
       try{
         const result = await googleSignIn();
         const userInfo = {

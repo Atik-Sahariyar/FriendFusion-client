@@ -74,6 +74,7 @@ const Announcement = () => {
                     Submit
                 </button>
             </form>
+    
         </div>
     );
 };
